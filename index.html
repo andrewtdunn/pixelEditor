@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    </head>
+    <body>
+        <canvas id="c" width="400" height="400"></canvas>
+
+        <script>
+            var c = document.querySelector("#c");
+            var ctx = c.getContext("2d");
+
+            var image = new Image();
+
+
+            function grayImage(){
+                var imageData = ctx.getImageData(0,0,c.width,c.height);
+                for (var i=0; i < imageData.data.length; i += 4){
+
+                        var pixRed = imageData.data[i];
+                        var pixGreen = imageData.data[i+1];
+                        var pixBlue = imageData.data[i+2];
+                        var pixTotalGrayed;
+
+                        if (    ( (Math.floor(i /(c.width*2))  % 2 == 0)  &&  i <  (c.width * c.height * 2))
+                            ||  ( (Math.floor(i /(c.width*2))  % 2 == 1)  &&  i  >  (c.width * c.height * 2))
+
+
+                            ){
+
+                            pixTotalGrayed = (pixRed + pixGreen + pixBlue )/3;
+
+                            /*
+                            console.log("-------");
+                            console.log("i: " + i);
+                            console.log("r: " + pixRed);
+                            console.log("g: " + pixGreen);
+                            console.log("rb: " + pixBlue);
+                            */
+
+                           /*
+                            imageData.data[i]         = 255-pixRed;
+                            imageData.data[i+1]     = 255-pixGreen;
+                            imageData.data[i+2]     = 255-pixBlue;
+                            */
+
+                         }
+                         else{
+                            pixTotalGrayed = (0.3 * pixRed + 0.59 * pixGreen + 0.11 * pixBlue );
+                         }
+
+                        imageData.data[i]         = pixTotalGrayed;
+                        imageData.data[i+1]     = pixTotalGrayed;
+                        imageData.data[i+2]     = pixTotalGrayed;
+                        imageData.data[i+3]     = 255;
+            }
+                ctx.putImageData(imageData,0,0);
+
+            };
+
+            image.onload = function(){
+                ctx.drawImage(image,0,0,c.width, c.height);
+                grayImage();
+                var savedImage = c.toDataURL();
+                window.open(savedImage);
+            }
+
+            image.src = "IMG_0819.JPG";
+            //image.src = "latest.jpeg";
+            //image.src = "hrpt.png";
+
+
+
+
+        </script>
+    </body>
+</html>
