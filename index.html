@@ -21,37 +21,53 @@
                         var pixBlue = imageData.data[i+2];
                         var pixTotalGrayed;
 
+                        // quadrant 1
                         if (    ( (Math.floor(i /(c.width*2))  % 2 == 0)  &&  i <  (c.width * c.height * 2))
-                            ||  ( (Math.floor(i /(c.width*2))  % 2 == 1)  &&  i  >  (c.width * c.height * 2))
+                            /*||  ( (Math.floor(i /(c.width*2))  % 2 == 1)  &&  i  >  (c.width * c.height * 2) ) */
 
 
                             ){
 
-                            pixTotalGrayed = (pixRed + pixGreen + pixBlue )/3;
 
-                            /*
-                            console.log("-------");
-                            console.log("i: " + i);
-                            console.log("r: " + pixRed);
-                            console.log("g: " + pixGreen);
-                            console.log("rb: " + pixBlue);
-                            */
 
-                           /*
+                            imageData.data[i]         = pixRed;
+                            imageData.data[i+1]     = pixGreen;
+                            imageData.data[i+2]     = pixBlue;
+
+
+
+
+                         }
+                         // quadrant 4
+                         else if ( (Math.floor(i /(c.width*2))  % 2 == 1)  &&  i  >  (c.width * c.height * 2) ){
                             imageData.data[i]         = 255-pixRed;
                             imageData.data[i+1]     = 255-pixGreen;
                             imageData.data[i+2]     = 255-pixBlue;
-                            */
 
                          }
-                         else{
+                         //quadrant 2
+                        else if ( (Math.floor(i /(c.width*2))  % 2 == 1)  &&  i  < (c.width * c.height * 2) ){
+                            if (i  % 100 > 50){
+                                //console.log(i % 10);
+                                pixTotalGrayed = (pixRed + pixGreen + pixBlue )/3;
+                                imageData.data[i]         = pixTotalGrayed;
+                                imageData.data[i+1]     = pixTotalGrayed;
+                                imageData.data[i+2]     = pixTotalGrayed;
+                            }
+                        }
+                        //quandrant 3
+                        else {
                             pixTotalGrayed = (0.3 * pixRed + 0.59 * pixGreen + 0.11 * pixBlue );
-                         }
 
-                        imageData.data[i]         = pixTotalGrayed;
-                        imageData.data[i+1]     = pixTotalGrayed;
-                        imageData.data[i+2]     = pixTotalGrayed;
-                        imageData.data[i+3]     = 255;
+                            imageData.data[i]         = pixTotalGrayed;
+                            imageData.data[i+1]     = pixTotalGrayed;
+                            imageData.data[i+2]     = pixTotalGrayed;
+
+                         }
+                         // opacity
+                         imageData.data[i+3]     = 255;
+
+
             }
                 ctx.putImageData(imageData,0,0);
 
